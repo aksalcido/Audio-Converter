@@ -2,21 +2,21 @@ import subprocess
 import os
 
 
-def directoryContains(videoFile: str) -> bool:
+def directoryContains(audioFile: str) -> bool:
     ''' Returns True or False if the file is already in the directory to avoid overwriting.'''
-    return videoFile in os.listdir()
+    return audioFile in os.listdir()
 
 
-def convertVideo(fileInput: str, videoFile: str) -> None:
+def convertVideo(videoInput: str, audioFile: str) -> None:
     print('Starting to Convert...')
     
-    command = f"ffmpeg -i {fileInput} -ab 160k -ac 2 -ar 44100 -vn {videoFile}"
+    command = f"ffmpeg -i {videoInput} -ab 160k -ac 2 -ar 44100 -vn {audioFile}"
     subprocess.call(command, shell=True)
 
     print('DONE')
 
 
-def overwrite(fileInput: str, videoFile: str):
+def overwrite(videoInput: str, audioFile: str):
     print("\nWARNING: ")
     print("This file is already in the directory and will be overwritten!")
     response = None
@@ -25,8 +25,8 @@ def overwrite(fileInput: str, videoFile: str):
         response = input("Type 'yes' or 'no' to proceed: ").lower()
 
         if response == 'yes':
-            os.remove(videoFile)
-            convertVideo(fileInput, videoFile)
+            os.remove(audioFile)
+            convertVideo(videoInput, audioFile)
             return
         
         elif response == 'no':
@@ -36,15 +36,15 @@ def overwrite(fileInput: str, videoFile: str):
 
 
 def main():
-    fileInput = input("Input the link to your video file: ")
-    videoFile = input("Input the name of your audio file: ")
+    videoInput = input("Input the link to your video file: ")
+    audioFile  = input("Input the name of your audio file: ")
 
 
-    if directoryContains(videoFile):
-        overwrite(fileInput, videoFile)
+    if directoryContains(audioFile):
+        overwrite(videoInput, audioFile)
 
     else:
-        convertVideo(fileInput, videoFile)
+        convertVideo(videoInput, audioFile)
 
 
 

@@ -61,12 +61,15 @@ def youtubeLink(videoInput: str) -> bool:
 def youtubeDownload(user_link: str, audioFile) -> str:
     ''' Downloads the video from YouTube if the user inputted a YouTube link. '''
     print('Downloading...')
-    
-    #command = f"youtube-dl -f mp4 {user_link}"
-    command = f"youtube-dl -f bestaudio --extract-audio --audio-format mp3 --audio-quality 0 {user_link}"
-    subprocess.call(command, shell=True)
-    videoInput = max(os.listdir(), key=os.path.getctime)
-    os.rename(videoInput, audioFile)
+    try:
+        #command = f"youtube-dl -f mp4 {user_link}"
+        command = f"youtube-dl -f bestaudio --extract-audio --audio-format mp3 --audio-quality 0 {user_link}"
+        subprocess.call(command, shell=True)
+        videoInput = max(os.listdir(), key=os.path.getctime)
+        os.rename(videoInput, audioFile)
+
+    except os.error:
+        print('Invalid characters used for File name. YouTube title is now File name.')
     
     print('Done Downloading..')
 

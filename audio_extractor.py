@@ -58,11 +58,10 @@ def youtubeLink(videoInput: str) -> bool:
     return 'youtube' in videoInput
 
 
-def youtubeDownload(user_link: str, audioFile) -> str:
+def youtubeDownload(user_link: str, audioFile) -> None:
     ''' Downloads the video from YouTube if the user inputted a YouTube link. '''
     print('Downloading...')
     try:
-        #command = f"youtube-dl -f mp4 {user_link}"
         command = f"youtube-dl -f bestaudio --extract-audio --audio-format mp3 --audio-quality 0 {user_link}"
         subprocess.call(command, shell=True)
         videoInput = max(os.listdir(), key=os.path.getctime)

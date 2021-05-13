@@ -1,0 +1,41 @@
+<html>
+<head>
+    <title>Flask Youtube Converter</title>
+    <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/style.css') }}">
+
+    <!-- Open Sans Google Font -->
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div id="page-wrapper">
+        <div class="container">
+            <h1>Youtube Video Converter</h1>
+            <!-- Form Container -- Url & Submit -->
+            <div id="form-container">
+                <h3>Please insert a valid YouTube URL: </h3>
+
+                <form action="/" method="POST">
+                    <input type="text" id="url" name="url" placeholder="url">
+                    <input type="submit" value="Submit">
+                </form>
+
+                <!-- Codec Format Buttons -->
+                <div id="codec-format-buttons">
+                    <a class="button3">MP3</a>
+                    <a class="button3">MP4</a>
+                </div>
+            </div>
+        </div>
+        <div class="container" id="history">
+            <h1> History </h1>
+
+            <ol reversed>
+                {% for link in history %}
+                    <li><a href="{{link}}">{{link}}</a></li>
+                {% endfor %}
+            </ol>
+        </div>
+    </div>
+</body> 
+</html>

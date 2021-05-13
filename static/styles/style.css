@@ -1,0 +1,79 @@
+body {
+    background: #FCF6F5FF;
+    width: 100%;
+    font-family: 'Open Sans', sans-serif;
+}
+
+.container {
+    background: #89ABE3FF;
+    text-align: center;
+    width: 50%;
+    height: auto;
+    margin: 0 auto;
+    padding-bottom: 20px;
+    border-radius: 20px;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.container h1 {
+    color: #FCF6F5FF;
+}
+
+/* Form Container Styling */
+#form-container {
+    background-color: lightblue;
+    width: 60%;
+    height: auto;
+    margin: 0 auto;
+    position: relative;
+    padding: 10px;
+    border-radius: 10px;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+#form-container h3 {
+    color: #FCF6F5FF;
+}
+
+#url {
+    width: 60%;
+}
+
+/* Codec Format Buttons Styling */
+#codec-format-buttons {
+    width: 100%;
+}
+a.button3 {
+    display:inline-block;
+    padding:0.3em 1.2em;
+    margin:0 0.3em 0.3em 0;
+    border-radius:2em;
+    box-sizing: border-box;
+    text-decoration:none;
+    font-family:'Roboto',sans-serif;
+    font-weight:300;
+    color:#FFFFFF;
+    background-color:#4eb5f1;
+    text-align:center;
+    transition: all 0.2s;
+}
+
+a.button3:hover {
+    background-color:#4095c6;
+}
+
+@media all and (max-width:30em) {
+    a.button3 {
+        display:block;
+        margin:0.2em auto;
+    }
+}
+
+/* History Styling */
+#history {
+    margin-top: 10px;
+}
+
+#history h1 {
+    border-bottom: 1px solid #FCF6F5FF;
+}

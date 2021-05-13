@@ -68,3 +68,12 @@ a.button3:hover {
         margin:0.2em auto;
     }
 }
+
+/* History Styling */
+#history {
+    margin-top: 10px;
+}
+
+#history h1 {
+    border-bottom: 1px solid #FCF6F5FF;
+}

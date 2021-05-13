@@ -27,6 +27,15 @@
                 </div>
             </div>
         </div>
+        <div class="container" id="history">
+            <h1> History </h1>
+
+            <ol reversed>
+                {% for link in history %}
+                    <li><a href="{{link}}">{{link}}</a></li>
+                {% endfor %}
+            </ol>
+        </div>
     </div>
 </body> 
 </html>

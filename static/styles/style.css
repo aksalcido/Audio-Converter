@@ -77,3 +77,28 @@ a.button3:hover {
 #history h1 {
     border-bottom: 1px solid #FCF6F5FF;
 }
+
+ol li {
+    float: left;
+    width: 33%;
+    padding-bottom: 25px;
+}
+
+ol {
+    list-style-type: disc;
+    list-style: none;
+}
+
+.label {
+    color: #FCF6F5FF;
+    padding: 8px;
+    border-radius: 10px;
+}
+
+.success {
+    background-color: #04AA6D;
+}
+
+.failure {
+    background-color: #f44336;
+}

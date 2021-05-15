@@ -1,6 +1,8 @@
 <html>
 <head>
     <title>Flask Youtube Converter</title>
+    
+    <!-- Stylesheet -->
     <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/style.css') }}">
 
     <!-- Open Sans Google Font -->
@@ -30,9 +32,25 @@
         <div class="container" id="history">
             <h1> History </h1>
 
-            <ol reversed>
-                {% for link in history %}
-                    <li><a href="{{link}}">{{link}}</a></li>
+            <ol>
+                <li>Result</li>
+                <li>Title</li>
+                <li>URL</li>
+                
+                <!-- Session Download History -->
+                {% for dl_res in history %}
+                    <li>
+                        {% if dl_res.status %}
+                            <span class="label success">SUCCESS</span>
+                            <li>{{dl_res.title}} </li>
+                        {% else %}
+                            <span class="label failure">FAILURE</span>
+                            <li> INVALID LINK </li>
+                        {% endif %}
+                    </li>
+                    <li>
+                        <a href="{{link}}">{{dl_res.url}}</a> 
+                    </li>
                 {% endfor %}
             </ol>
         </div>

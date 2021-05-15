@@ -1,11 +1,16 @@
 from __future__ import unicode_literals
 from python_settings import settings
 from logger import Logger
+from collections import namedtuple
+
 import os
 import youtube_dl
 
 # Setup the GLOBAL Variables through settings.py
 os.environ["SETTINGS_MODULE"] = 'settings'
+
+# Sets up a DownloadResult namedtuple to store in Downloader history for front end display purposes
+DownloadResult = namedtuple('DownloadResult', ['status', 'title', 'url'])
 
 # https://stackoverflow.com/questions/13034496/using-global-variables-between-files
 class Downloader:
@@ -34,20 +39,21 @@ class Downloader:
         self.status = settings.WAITING_FOR_DOWNLOAD
         self.history = []
 
-    def download(self, link) -> int:
-        '''
-        Takes a valid url link argument and assigns it to the Downloaders self.url_link attribute.
-        Then runs the downloader and downloads the url argument leading to a download_result.
-        Stores the download_result, resets the downloader and returns the result to user.
-        '''
+    def download(self, link: str) -> None:
+        """
+        Args:
+        link: Takes a string argument 'link' referring to the YouTube link being requested to download.
+
+        Return:
+        None, however the entirity of this program is ran through this function. The link is assigned to the
+        downloader, the downloader runs and downloads the video (if valid url), and the downloader stores the
+        DownloadResult in reset, and restarts to be available for the next url input.
+        """
         self.assign_link(link)
         self._run()
-        download_result = self.status
         self._reset()
 
-        return download_result
-
-    def _run(self):
+    def _run(self) -> None:
         '''
         Runs the downloader -- asserting that there is a valid url_link and then using
         youtube-dl, downloads the requested url_link with the current settings being in
@@ -63,26 +69,33 @@ class Downloader:
             self.assign_status(settings.DOWNLOAD_FAILURE)
         else:
             self.assign_status(settings.DOWNLOAD_SUCCESS)
-    
-    def assign_link(self, link: str):
-        '''
-        Set the url link for the downloader to the link argument
-        '''
-        self.url_link = link
 
-    def assign_status(self, status):
+    def _reset(self) -> None:
         '''
-        Set the status to the status argument
+        Saves the url_link in history and then proceeds to reset the attributes of the downloader for the next download.
         '''
-        self.status = status
+        self._store()
+        self.assign_link(None)
+        self.assign_status(settings.WAITING_FOR_DOWNLOAD)
 
-    def assign_thread(self, thread_hook):
-        self.ydl_opts['progress_hooks'] = [thread_hook]
+    def _store(self) -> None:
+        '''
+        Store a DownloadResult namedtuple for the current downloaded item. This function is called on _reset() which
+        will only be invoked after a download request has been made.
+        '''
+        dl_res = None
+        
+        if self.status == settings.DOWNLOAD_SUCCESS:
+            with youtube_dl.YoutubeDL(self.ydl_opts) as ydl:
+                info_dict = ydl.extract_info(self.url_link)
+                video_title = info_dict.get("title", None)
+                dl_res = DownloadResult(settings.DOWNLOAD_SUCCESS, video_title, self.url_link)
+        else:
+            dl_res = DownloadResult(settings.DOWNLOAD_FAILURE, "NO TITLE", self.url_link)
+        
+        self.history.append(dl_res)
 
-    def get_history(self) -> list:
-        return self.history
-    
-    def change_codec_format(self, format: str):
+    def change_codec_format(self, format: str) -> None:
         '''
         Changes the codec_format in the download settings.
         Takes a format argument and assigns it in ydl_opts.
@@ -91,25 +104,41 @@ class Downloader:
         assert format == settings.MP3_FORMAT or format == settings.MP4_FORMAT
         self.ydl_opts['postprocessors'][0]['preferredcodec'] = format
 
-    def _reset(self):
+    # Assign Functions #
+    def assign_link(self, link: str) -> None:
         '''
-        Saves the url_link in history and then proceeds to reset the attributes of the downloader for the next download.
+        Set the url link for the downloader to the link argument
         '''
-        self.history.append(self.url_link)
-        self.assign_link(None)
-        self.assign_status(settings.WAITING_FOR_DOWNLOAD)
+        self.url_link = link
 
-    def _hook(self, d):
+    def assign_status(self, status) -> None:
+        '''
+        Set the status to the status argument
+        '''
+        self.status = status
+
+    def assign_thread(self, thread_hook) -> None:
+        '''
+        Assigns the progress hook to the assigned thread. However, this function
+        is not used in this current version.
+        '''
+        self.ydl_opts['progress_hooks'] = [thread_hook]
+
+    # Get Function #
+    def get_history(self) -> [DownloadResult]:
+        '''
+        Returns the list of DownloadResults for the current session.
+        '''
+        return self.history
+
+    def _hook(self, d) -> None:
         '''
         Download message kept in ydl_opts to see completion of download.
         '''
         if d['status'] == 'finished':
             print('Done downloading, now converting...')
 
-'''
 if __name__ == '__main__':
     downloader = Downloader()
-
     downloader.download("https://www.youtube.com/watch?v=umjPSpcqL9w")
     downloader.download("https://www.youtube.com/watch?v=ZEcqHA7dbwM")
-'''

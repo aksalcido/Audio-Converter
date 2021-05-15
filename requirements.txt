@@ -1,6 +1,5 @@
 certifi==2020.12.5
 click==7.1.2
-ffmpeg-python==0.2.0
 Flask==1.1.2
 future==0.18.2
 itsdangerous==1.1.0

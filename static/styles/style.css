@@ -43,27 +43,29 @@ body {
 #codec-format-buttons {
     width: 100%;
 }
-a.button3 {
+
+.button3 {
     display:inline-block;
-    padding:0.3em 1.2em;
+    padding:0.4em 1.3em;
     margin:0 0.3em 0.3em 0;
     border-radius:2em;
     box-sizing: border-box;
     text-decoration:none;
     font-family:'Roboto',sans-serif;
     font-weight:300;
+    font-size: 18px;
     color:#FFFFFF;
     background-color:#4eb5f1;
     text-align:center;
     transition: all 0.2s;
 }
 
-a.button3:hover {
+.button3:hover {
     background-color:#4095c6;
 }
 
 @media all and (max-width:30em) {
-    a.button3 {
+    .button3 {
         display:block;
         margin:0.2em auto;
     }
@@ -72,23 +74,53 @@ a.button3:hover {
 /* History Styling */
 #history {
     margin-top: 10px;
+    background: #89ABE3FF;
 }
 
 #history h1 {
     border-bottom: 1px solid #FCF6F5FF;
 }
 
-ol li {
+ul {
+    list-style-type: disc;
+    list-style-position: inside;
+    list-style: none;
+    text-align:center;
+    padding-left: 0;
+}
+
+#column-labels {
+    background: #89ABE3FF;
+    height: 45px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    color: #FCF6F5FF;
+    font-size: 20px;
+}
+
+.row {
+    background: white;
+    width: 100%;
+    height: 60px;
+    border-bottom: 1px solid #FCF6F5FF;
+    padding-top: 35px;
+    background: #89ABE3FF;
+    color: #FCF6F5FF;
+}
+
+.row:nth-child(2n) {
+    background: #FCF6F5FF;
+    color: rgb(110, 155, 228);
+}
+
+.history-list li {
     float: left;
     width: 33%;
-    padding-bottom: 25px;
+    height: 100%;
 }
 
-ol {
-    list-style-type: disc;
-    list-style: none;
-}
 
+/* Success/Failure Labels */
 .label {
     color: #FCF6F5FF;
     padding: 8px;

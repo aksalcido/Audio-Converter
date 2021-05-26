@@ -3,11 +3,16 @@
     <title>Flask Youtube Converter</title>
     
     <!-- Stylesheet -->
-    <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/style.css') }}">
+    <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='/styles/style.css') }}">
 
     <!-- Open Sans Google Font -->
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Open+Sans&display=swap" rel="stylesheet">
+
+    <!-- Link JavaScript -->
+    <script type="text/javascript">
+
+    </script>
 </head>
 <body>
     <div id="page-wrapper">
@@ -17,43 +22,65 @@
             <div id="form-container">
                 <h3>Please insert a valid YouTube URL: </h3>
 
-                <form action="/" method="POST">
+                <form action="/convert" method="POST">
                     <input type="text" id="url" name="url" placeholder="url">
                     <input type="submit" value="Submit">
                 </form>
 
                 <!-- Codec Format Buttons -->
-                <div id="codec-format-buttons">
-                    <a class="button3">MP3</a>
-                    <a class="button3">MP4</a>
-                </div>
+                <form action="/change_format" method="POST">
+                    <div id="codec-format-buttons">
+                        <input class="button3" type="submit" name="format-button" value="MP3" id="mp3-button"></a>
+                        <input class="button3" type="submit" name="format-button" value="MP4" id="mp4-button" disabled></a>
+                    </div>
+                </form>
             </div>
         </div>
+
         <div class="container" id="history">
             <h1> History </h1>
 
-            <ol>
-                <li>Result</li>
-                <li>Title</li>
-                <li>URL</li>
+            <ul class="history-list">
+                <div class="row" id="column-labels">
+                    <li>Result</li>
+                    <li>Title</li>
+                    <li>URL</li>
+                </div>
                 
                 <!-- Session Download History -->
                 {% for dl_res in history %}
-                    <li>
-                        {% if dl_res.status %}
-                            <span class="label success">SUCCESS</span>
-                            <li>{{dl_res.title}} </li>
-                        {% else %}
-                            <span class="label failure">FAILURE</span>
-                            <li> INVALID LINK </li>
-                        {% endif %}
-                    </li>
-                    <li>
-                        <a href="{{link}}">{{dl_res.url}}</a> 
-                    </li>
+                    <div class="row">
+                        <li>
+                            {% if dl_res.status %}
+                                <span class="label success">SUCCESS</span>
+                                <li>{{dl_res.title}} </li>
+                                <li><a href="{{dl_res.url}}">{{dl_res.url}}</a> </li>
+                            {% else %}
+                                <span class="label failure">FAILURE</span>
+                                <li> INVALID LINK </li>
+                                <li>{{dl_res.url}}</li>
+                            {% endif %}
+                        </li>
+                    </div>
                 {% endfor %}
-            </ol>
+            </ul>
         </div>
     </div>
+
+
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    <script type=text/javascript>
+        $(function() {
+            $('a #mp4-button').on('click', function(e) {
+                e.preventDefault()
+
+                $.getJSON('/change_format',
+                    function(data) {
+                    //do nothing https://stackoverflow.com/questions/42601478/flask-calling-python-function-on-button-onclick-event
+                });
+                return false;
+            });
+        });
+    </script>
 </body> 
 </html>

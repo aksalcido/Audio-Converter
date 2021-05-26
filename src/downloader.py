@@ -36,8 +36,12 @@ class Downloader:
             'noplaylist': True
         }
         self.url_link = None
+        self.running = False
         self.status = settings.WAITING_FOR_DOWNLOAD
         self.history = []
+
+    def available(self) -> bool:
+        return not self.running
 
     def download(self, link: str) -> None:
         """
@@ -49,9 +53,15 @@ class Downloader:
         downloader, the downloader runs and downloads the video (if valid url), and the downloader stores the
         DownloadResult in reset, and restarts to be available for the next url input.
         """
-        self.assign_link(link)
-        self._run()
-        self._reset()
+        try:
+            self.assign_link(link)
+            self._run()
+            self.assign_status(settings.DOWNLOAD_SUCCESS)
+        except (AssertionError, youtube_dl.utils.DownloadError) as e:
+            self.assign_status(settings.DOWNLOAD_FAILURE)
+        finally:
+            print("SETTINGS?: " + str(self.status))
+            self._reset()
 
     def _run(self) -> None:
         '''
@@ -59,16 +69,12 @@ class Downloader:
         youtube-dl, downloads the requested url_link with the current settings being in
         self.ydl_opts.
         '''
-        try:
-            assert self.url_link
+        assert self.url_link
+        self.running = True
+        
+        with youtube_dl.YoutubeDL(self.ydl_opts) as ydl:
+            ydl.download([self.url_link])
 
-            with youtube_dl.YoutubeDL(self.ydl_opts) as ydl:
-                ydl.download([self.url_link])
-    
-        except (AssertionError, youtube_dl.utils.DownloadError) as e:
-            self.assign_status(settings.DOWNLOAD_FAILURE)
-        else:
-            self.assign_status(settings.DOWNLOAD_SUCCESS)
 
     def _reset(self) -> None:
         '''
@@ -77,6 +83,7 @@ class Downloader:
         self._store()
         self.assign_link(None)
         self.assign_status(settings.WAITING_FOR_DOWNLOAD)
+        self.running = False
 
     def _store(self) -> None:
         '''

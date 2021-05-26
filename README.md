@@ -1,5 +1,5 @@
 # YouTube-Video-Converter
-Flask deploys a local webpage as a `youtube-dl` wrapper where user can input valid youtube links and convert to mp3 files.
+Utilizes Flask to deploy a local webpage as a youtube-dl wrapper where users can input valid YouTube links and convert to mp3 files
 
 # Requirements
 Installation of Latest version of `youtube-dl`:
